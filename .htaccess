@@ -1,0 +1,6 @@
+Order deny,allow
+Deny from all
+
+<Files git-update.php>
+	Allow from all
+</Files>
