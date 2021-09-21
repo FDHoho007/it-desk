@@ -91,7 +91,7 @@
       onkeyup="if(event.keyCode === 38) fast = false;">
 
 <main>
-    <h1 style="margin-top: 400px;">Credits (Test)</h1>
+    <h1 style="margin-top: 400px;">Credits</h1>
 
     <div>
         <h1>Ticket Client 1.0</h1>
