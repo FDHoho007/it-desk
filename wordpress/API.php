@@ -72,7 +72,7 @@ class API
                         "id" => $ticket->getId(),
                         "author" => $ticket->getAuthor() == -1 ? "Anonym" : get_user_by("ID", $ticket->getAuthor())->display_name,
                         "me" => is_user_logged_in() && get_current_user_id() == $ticket->getOperator(),
-                        "img" => $ticket->getAuthor() == -1 ? "https://secure.gravatar.com/avatar/d28dd643c742dcb198d80413af29c490?s=96&d=mm&r=g" : get_avatar_url($ticket->getAuthor()),
+                        "img" => $ticket->getAuthor() == -1 ? "https://secure.gravatar.com/avatar/84013c34db30179ccfc3576255d2e89f?s=96&d=mm&r=g" : get_avatar_url($ticket->getAuthor()),
                         "issue" => $ticket->getIssue()->getTitle(),
                         "status" => $ticket->getStatus(),
                         "statusText" => Constants::STATUS[$ticket->getStatus()],
