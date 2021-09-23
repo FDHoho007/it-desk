@@ -4,7 +4,6 @@ require_once "include/it.php";
 require_once "../elliptic-php/EdDSA.php";
 
 const DEBUG = false;
-const JAHRGANGSSTUFEN = [5 => 890200008782127115, 6 => 890200007863574578, 7 => 890200006135541780, 8 => 890200004461985793, 9 => 890200003249832046, 10 => 890200001060425738, 11 => 890199998644518942, 12 => 890199990612406282];
 
 $discord = ITDesk::getInstance()->getDiscord();
 $config = ITDesk::getInstance()->getConfig()->getContents()["discord"];
