@@ -26,7 +26,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 						$discord->api("PUT", "guilds/$gid/members/$uid/roles/$role");
 					else if($value != $stufe && in_array($role, $roles))
 						$discord->api("DELETE", "guilds/$gid/members/$uid/roles/$role");
-				$discord->reply($body, "Deine Jahrgangsstufe wurde auf $stufe aktualisiert.");
+				$discord->reply($body, "Deine Jahrgangsstufe wurde auf $value aktualisiert.");
 			}
 			else if($body["data"]["name"] == "verify") {
 				$subcommand = $body["data"]["options"][0]["name"];
