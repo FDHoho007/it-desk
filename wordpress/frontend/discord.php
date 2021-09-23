@@ -30,18 +30,22 @@ function custom_page() {
             $member = $discord->api("GET", "guilds/" . $config["guildId"] . "/members/" . $_GET["discord"]);
             if(isset($member["user"])) {
                 if(isset($_POST["_wpnonce"]) && wp_verify_nonce($_POST["_wpnonce"])) {
-                    $discord->api("PUT", "guilds/" . $config["guildId"] . "/members/" . $_GET["discord"] . "/roles/" . $config["verificationRole"]);
-                    header("Location: " . home_url());
-                }
-                else { 
-                    ?>
+                    $discord->api("PUT", "guilds/" . $config["guildId"] . "/members/" . $_GET["discord"] . "/roles/" . $config["verificationRole"]); ?>
+
+                <div class="main main-raised">
+                    <div class="container section section-text text-center">
+                        Dein Discord Account wurde bestätigt.
+                    </div>
+                </div>
+
+                <?php } else { ?>
 
                     <div class="main main-raised">
-                        <div class="container section section-text">
+                        <div class="container section section-text text-center">
                             <form method="post">
                                 <?php wp_nonce_field(); ?>
-                                Bist du sicher, dass du folgenden Discord Account über deinen WordPress Account als IT Crowd Mitglied bestätigen möchtest: 
-                                <?php echo($member["user"]["username"] . "#" . $member["user"]["discriminator"]); ?>
+                                Bist du sicher, dass du folgenden Discord Account über deinen WordPress Account<br>
+                                als IT Crowd Mitglied bestätigen möchtest: <?php echo($member["user"]["username"] . "#" . $member["user"]["discriminator"]); ?><br><br>
                                 <button type="submit">Account bestätigen</button>
                             </form>
                         </div>
@@ -52,7 +56,7 @@ function custom_page() {
             else { ?>
 
                 <div class="main main-raised">
-                    <div class="container section section-text">
+                    <div class="container section section-text text-center">
                         Diesen Discord Nutzer gibt es nicht.
                     </div>
                 </div>
@@ -63,7 +67,7 @@ function custom_page() {
     else { ?>
 
         <div class="main main-raised">
-            <div class="container section section-text">
+            <div class="container section section-text text-center">
             Diesen Discord Nutzer gibt es nicht.
             </div>
         </div>

@@ -94,6 +94,7 @@ class Wordpress
         $query_vars[] = 'device';
         $query_vars[] = 'model';
         $query_vars[] = 'room';
+        $query_vars[] = 'discord';
         return $query_vars;
     }
 
