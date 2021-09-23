@@ -10,6 +10,7 @@ class ITDesk {
     private $tickets;
     private $webhooks;
     private $teams;
+    private $discord;
 
     public static function getInstance(): ITDesk
     {
@@ -29,6 +30,7 @@ class ITDesk {
         $this->tickets   = new Tickets($this->getDatabase()->queryAll("SELECT * FROM " . Constants::DB_TABLE_ISSUE), $this->getDatabase()->queryAll("SELECT * FROM " . Constants::DB_TABLE_TICKET), $this->getDatabase()->queryAll("SELECT * FROM " . Constants::DB_TABLE_TICKET_EVENTS . ";"), $this);
         $this->webhooks = new Webhooks($this->getDatabase()->queryAll("SELECT * FROM " . Constants::DB_TABLE_WEBHOOKS . ";"));
         $this->teams = new Teams($this->getDatabase()->queryAll("SELECT * FROM " . Constants::DB_TABLE_TEAMS_USER . ";"));
+        $this->discord = new Discord($this->getConfig()->getContents()["discord"]["botToken"]);
     }
 
     public function getAbsPath(): string
@@ -64,6 +66,11 @@ class ITDesk {
     public function getTeams(): Teams
     {
         return $this->teams;
+    }
+
+    public function getDiscord(): Discord
+    {
+        return $this->discord;
     }
 
     /* Redirect Functions */

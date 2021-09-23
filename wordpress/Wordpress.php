@@ -106,7 +106,7 @@ class Wordpress
                     exit;
                 } else
                     $this->custom_page($key);
-        foreach (["ticket", "device", "model", "room"] as $key)
+        foreach (["ticket", "device", "model", "room", "discord"] as $key)
             if (array_key_exists($key, $wp->query_vars))
                 $this->custom_page($key);
     }
