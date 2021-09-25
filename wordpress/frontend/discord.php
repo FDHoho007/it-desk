@@ -13,7 +13,70 @@ function custom_page() {
     $discord = ITDesk::getInstance()->getDiscord();
     $config = ITDesk::getInstance()->getConfig()->getContents()["discord"];
     if($_GET["discord"] == null) {
+        if(wp_get_current_user() == null) { ?>
 
+            <div class="main main-raised">
+                <div class="container section section-text text-center">
+                    Bitte melde dich an, um dich als IT Crowd Mitglied zu bestätigen.
+                </div>
+            </div>
+
+        <?php } else if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) { ?>
+
+            <div class="main main-raised">
+                <div class="container section section-text text-center">
+                    Du bist bereits als IT Crowd Mitglied bestätigt.
+                </div>
+            </div>
+
+        <?php } else if(isset($_GET["code"])) {
+            $token = $discord->api("POST", "oauth2/token", "client_id=" . $config["clientId"] . "&client_secret=" . $config["clientSecret"] . "&grant_type=authorization_code&code=" . $_GET["code"] . "&redirect_uri=https%3A%2F%2Fit.student-gymp.de%2Fdiscord%2Fverify", ["Content-Type: application/x-www-form-urlencoded"]);
+            if(isset($token["access_token"])) {
+                $me = $discord->api("GET", "users/@me", "", ["Authorization: Bearer " . $token["access_token"]]);
+                $member = $discord->api("GET", "guilds/" . $config["guildId"] . "/members/" . $me["id"]);
+                if(isset($member["roles"])) {
+                    if(in_array($config["verificationRole"], $member["roles"])) {
+                        wp_get_current_user()->set_role("itcrowd"); ?>
+                        
+                        <div class="main main-raised">
+                            <div class="container section section-text text-center">
+                                Du bist nun als IT Crowd Mitglied im TicketClient bestätigt.
+                            </div>
+                        </div>
+
+                    <?php }
+                    else { ?>
+
+                        <div class="main main-raised">
+                            <div class="container section section-text text-center">
+                                Du bist auf dem IT Crowd Discord Server nicht als Mitglied bestätigt.
+                            </div>
+                        </div>
+
+                    <?php }
+                }
+                else { ?>
+
+                    <div class="main main-raised">
+                        <div class="container section section-text text-center">
+                            Du bist noch nicht auf dem IT Crowd Discord Server. Kannst aber gerne <a href="/discord">hier</a> beitreten.
+                        </div>
+                    </div>
+
+                <?php }
+            }
+        }
+        else { ?>
+
+            <div class="main main-raised">
+                <div class="container section section-text text-center">
+                    Wenn du bereits auf dem IT Crowd Discord Server bist und dort als IT Crowd Mitglied bestätigt bist, 
+                    kannst du dich über Discord als IT Crowd Mitglied bestätigen und deine Rolle auch hier im TicketClient bekommen.
+                    <button onclick="location.href = 'https://discord.com/api/oauth2/authorize?response_type=code&client_id=<?php echo($config["clientId"]); ?>&scope=identify&state=15773059ghq9183habn&redirect_uri=https%3A%2F%2Fit.student-gymp.de%2Fdiscord%2Fverify&prompt=consent';">Über Discord bestätigen</button>
+                </div>
+            </div>
+
+        <?php }
     }
     else if(ctype_digit("".$_GET["discord"])) {
         if(!is_user_logged_in())
@@ -21,7 +84,7 @@ function custom_page() {
         else if(!Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) { ?>
 
                 <div class="main main-raised">
-                    <div class="container section section-text">
+                    <div class="container section section-text text-center">
                         Du bist momentan nicht als IT Crowd Mitglied angemeldet.
                     </div>
                 </div>

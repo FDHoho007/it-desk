@@ -6,11 +6,11 @@ class Discord {
         $this->botToken = $botToken;
     }
 
-    public function api(string $method, string $url, string $body = "") {
+    public function api(string $method, string $url, string $body = "", array $header = ["Authorization: Bot " . $this->botToken, "Content-Type: application/json"]) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://discord.com/api/v9/$url");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bot " . $this->botToken, "Content-Type: application/json"]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
