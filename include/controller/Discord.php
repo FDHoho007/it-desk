@@ -6,7 +6,9 @@ class Discord {
         $this->botToken = $botToken;
     }
 
-    public function api(string $method, string $url, string $body = "", array $header = ["Authorization: Bot " . $this->botToken, "Content-Type: application/json"]) {
+    public function api(string $method, string $url, string $body = "", array $header = ["Authorization: Bot ", "Content-Type: application/json"]) {
+        if($header[0] == "Authorization: Bot ")
+            $header[0] .= $this->botToken;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://discord.com/api/v9/$url");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
