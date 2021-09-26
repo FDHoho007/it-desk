@@ -70,9 +70,9 @@ function custom_page() {
 
             <div class="main main-raised">
                 <div class="container section section-text text-center">
-                    Wenn du bereits auf dem IT Crowd Discord Server bist und dort als IT Crowd Mitglied bestätigt bist, 
-                    kannst du dich über Discord als IT Crowd Mitglied bestätigen und deine Rolle auch hier im TicketClient bekommen.
-                    <button onclick="location.href = 'https://discord.com/api/oauth2/authorize?response_type=code&client_id=<?php echo($config["clientId"]); ?>&scope=identify&state=15773059ghq9183habn&redirect_uri=https%3A%2F%2Fit.student-gymp.de%2Fdiscord%2Fverify&prompt=consent';">Über Discord bestätigen</button>
+                    Wenn du bereits auf dem IT Crowd Discord Server bist und dort als IT Crowd Mitglied bestätigt bist,<br>
+                    kannst du dich über Discord als IT Crowd Mitglied bestätigen und deine Rolle auch hier im TicketClient bekommen.<br><br>
+                    <button onclick="location.href = 'https://discord.com/api/oauth2/authorize?response_type=code&client_id=<?php echo($config["clientId"]); ?>&scope=identify&redirect_uri=https%3A%2F%2Fit.student-gymp.de%2Fdiscord%2Fverify&prompt=consent';">Über Discord bestätigen</button>
                 </div>
             </div>
 
