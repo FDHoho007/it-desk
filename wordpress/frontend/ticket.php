@@ -181,15 +181,19 @@ function custom_page()
                     <br><br>
                     <b style="font-size: 14pt;"><?php echo(Constants::STATUS[$ticket->getStatus()] . ($ticket->getStatus() == 1 ? " (" . get_user_by("ID", $ticket->getOperator())->display_name . ")" : "")); ?></b>
                 </div>
-                <?php if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN) || (($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD))) { ?>
+                <?php 
+                $permissionBlockA = (($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) || ($ticket->getStatus() == 1 && ($ticket->getAuthor() == get_current_user_id() || $ticket->getOperator() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP)));
+                $permissionBlockB = ($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD);
+                $permissionBlockC = Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN);
+                if ($permissionBlockA || $permissionBlockB || $permissionBlockC) { ?>
                     <div style="text-align: right; margin-bottom: 10px; user-select: none;">
                         <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Bearbeiten</a>
                     </div>
                 <?php } ?>
-                <div id="edit" style="height: 10%;">
+                <div id="edit" style="height: 0px;">
                     <table>
                         <tr>
-                            <?php if ((($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) || ($ticket->getStatus() == 1 && ($ticket->getAuthor() == get_current_user_id() || $ticket->getOperator() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP)))) { ?>
+                            <?php if ($permissionBlockA) { ?>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>
@@ -200,7 +204,7 @@ function custom_page()
                                     </form>
                                 </td>
                             <?php }
-                            if (($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) { ?>
+                            if ($permissionBlockB) { ?>
                                 <td>
                                     <form method="post">
                                         <label>Levelauswahl</label><br>
@@ -212,7 +216,7 @@ function custom_page()
                                     </form>
                                 </td>
                             <?php }
-                            if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN)) { ?>
+                            if ($permissionBlockC) { ?>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>
