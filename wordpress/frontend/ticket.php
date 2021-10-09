@@ -186,7 +186,7 @@ function custom_page()
                         <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Bearbeiten</a>
                     </div>
                 <?php } ?>
-                <div id="edit" style="height: 0;">
+                <div id="edit" style="height: 10%;">
                     <table>
                         <tr>
                             <?php if ((($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) || ($ticket->getStatus() == 1 && ($ticket->getAuthor() == get_current_user_id() || $ticket->getOperator() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP)))) { ?>
