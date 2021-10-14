@@ -173,12 +173,12 @@
                         let parent = null;
 
                         if (parent == null)
-                            if (ticket["status"] === 0)
-                                parent = document.getElementById("board-" + ticket["status"] + "-" + ticket["level"]);
+                            if (ticket["status"] === 0 || ticket["status"] === 3)
+                                parent = document.getElementById("board-0-" + ticket["level"]);
                             else if (ticket["status"] === 1)
-                                parent = document.getElementById("board-" + ticket["status"] + "-" + (ticket["me"] ? "me" : "other"));
+                                parent = document.getElementById("board-1-" + (ticket["me"] ? "me" : "other"));
                             else if (ticket["status"] === 2)
-                                parent = document.getElementById("board-" + ticket["status"]);
+                                parent = document.getElementById("board-2");
                         if (parent != null) {
                             parent.appendChild(div);
                             //updateBox(parent);
