@@ -92,10 +92,13 @@ class API
 
     public static function ticket()
     {
-        if (isset($_GET["id"]) && isset($_GET["state"]) && isset($_GET["level"])) {
+        if (isset($_GET["id"]) && isset($_GET["upgrade"])) {
             $ticket = ITDesk::getInstance()->getTicket($_GET["id"]);
-            $level = intval($_GET["level"]);
-            if ($level != 1 && $level != 2 && $level != 3)
+            if($ticket != null && $ticket->canView() && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD) && $_GET["upgrade"] == $ticket->getLevel()-1) {
+                $ticket->setLevel($ticket->getLevel()-1);
+                $ticket->save();
+            }
+            /*if ($level != 1 && $level != 2 && $level != 3)
                 $level = 3;
             if ($ticket != null && $ticket->canView()) {
                 if ($_GET["state"] == 0) {
@@ -120,7 +123,7 @@ class API
                     }
                     $ticket->save();
                 }
-            }
+            }*/
         }
     }
 	

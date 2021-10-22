@@ -27,9 +27,6 @@ function custom_page()
                 $ticket->callEvent(StatusEvent::class);
                 $ticket->save();
             }
-        } else if ($_POST["action"] == "level" && isset($_POST["level"]) && ($_POST["level"] == 1 || $_POST["level"] == 2 || $_POST["level"] == 3) && $_POST["level"] != $ticket->getLevel() && ($ticket->getStatus() == 0 || $ticket->getStatus() == 3)) {
-            $ticket->setLevel($_POST["level"]);
-            $ticket->save();
         } else if ($_POST["action"] == "message" && isset($_POST["message"]) && ($ticket->getAuthor() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD))) {
             $ticket->callEvent(MessageEvent::class, htmlspecialchars($_POST["message"]));
             if ($ticket->getStatus() == 2 && !Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) {
@@ -41,7 +38,11 @@ function custom_page()
                 $ticket->save();
             }
         } else if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN))
-            if ($_POST["action"] == "status" && isset($_POST["status"]) && ($_POST["status"] == 0 || $_POST["status"] == 1 || $_POST["status"] == 2 || $_POST["status"] == 3) && $_POST["status"] != $ticket->getStatus()) {
+            if ($_POST["action"] == "level" && isset($_POST["level"]) && ($_POST["level"] == 1 || $_POST["level"] == 2 || $_POST["level"] == 3) && $_POST["level"] != $ticket->getLevel()) {
+                $ticket->setLevel($_POST["level"]);
+                $ticket->save();
+            }
+            else if ($_POST["action"] == "status" && isset($_POST["status"]) && ($_POST["status"] == 0 || $_POST["status"] == 1 || $_POST["status"] == 2 || $_POST["status"] == 3) && $_POST["status"] != $ticket->getStatus()) {
                 $ticket->setStatus($_POST["status"]);
                 $ticket->callEvent(StatusEvent::class);
                 $ticket->save();
@@ -183,9 +184,9 @@ function custom_page()
                 </div>
                 <?php 
                 $permissionBlockA = (($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) || ($ticket->getStatus() == 1 && ($ticket->getAuthor() == get_current_user_id() || $ticket->getOperator() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP)));
-                $permissionBlockB = ($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD);
-                $permissionBlockC = Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN);
-                if ($permissionBlockA || $permissionBlockB || $permissionBlockC) { ?>
+                //$permissionBlockB = ($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD);
+                $permissionBlockB = Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN);
+                if ($permissionBlockA || $permissionBlockB) { ?>
                     <div style="text-align: right; margin-bottom: 10px; user-select: none;">
                         <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Bearbeiten</a>
                     </div>
@@ -215,8 +216,6 @@ function custom_page()
                                         <button type="submit" name="level" value="3">3</button>
                                     </form>
                                 </td>
-                            <?php }
-                            if ($permissionBlockC) { ?>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>

@@ -31,11 +31,12 @@
         margin: 10px;
         border: 1px solid #aaa;
         background: #fff;
-        cursor: move;
+        /*cursor: move;*/
     }
 
     .sb-entry a {
         text-decoration: none;
+        cursor: pointer;
     }
 
     .grey {
@@ -47,6 +48,12 @@
         margin-right: 5px;
     }
 
+    .support-level-upgrade {
+        float: right;
+        position: relative;
+        right: 5px;
+    }
+
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
@@ -55,7 +62,7 @@
 
     let data = [];
 	let json = [];
-    let dragging = false;
+    /*let dragging = false;
     let dragOver = null;
 
     function dragElement(elmnt) {
@@ -111,16 +118,16 @@
         };
     }
 
-    function updateTicket(id, state, level) {
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "<?php echo(home_url() . "/wp-json/" . Constants::API_NAMESPACE . Constants::API_TICKET); ?>?id=" + id + "&state=" + state + "&level=" + level + "&_wpnonce=<?php echo(wp_create_nonce("wp_rest")); ?>", true);
-        xhttp.send();
-    }
-
     function checkA(event) {
         if (dragging)
             event.preventDefault();
         return !dragging;
+    }*/
+
+    function upgradeTicket(id, level) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "<?php echo(home_url() . "/wp-json/" . Constants::API_NAMESPACE . Constants::API_TICKET); ?>?id=" + id + "&upgrade=" + level + "&_wpnonce=<?php echo(wp_create_nonce("wp_rest")); ?>", true);
+        xhttp.send();
     }
 
     function updateBoard() {
@@ -134,10 +141,25 @@
                 for (let ticket of json) {
                     tickets.push(ticket["id"]);
                     if (ticket["id"] in data) {
-
+                        let e = document.getElementById("ticket-" + ticket["id"]);
+                        let a = e.getElementsByClassName("support-level-upgrade")[0];
+                        a.style.display = (ticket["status"] == 0 || ticket["status"] == 3) && ticket["level"] > 1 ? "" : "none";
+                        a.onclick = function () {
+                            upgradeTicket(ticket["id"], ticket["level"]-1);
+                            document.getElementById("board-0-" + (ticket["level"]-1)).appendChild(e);
+                        };
+                        if (ticket["status"] === 0 || ticket["status"] === 3)
+                            parent = document.getElementById("board-0-" + ticket["level"]);
+                        else if (ticket["status"] === 1)
+                            parent = document.getElementById("board-1-" + (ticket["me"] ? "me" : "other"));
+                        else if (ticket["status"] === 2)
+                            parent = document.getElementById("board-2");
+                        if(e.parentElement != parent)
+                            parent.appendChild(e);
                     } else {
                         let div = document.createElement("div");
                         div.id = "ticket-" + ticket["id"];
+                        div.setAttribute("level", ticket["level"]);
                         div.classList.add("sb-entry");
                         let img = document.createElement("img");
                         img.src = ticket["img"];
@@ -152,19 +174,30 @@
                         let a = document.createElement("a");
                         a.innerText = " #" + ticket["id"];
                         a.href = "<?php echo(home_url()); ?>/ticket/" + ticket["id"];
-                        a.onclick = checkA;
+                        //a.onclick = checkA;
                         a.style.fontWeight = "bold";
                         info.appendChild(a);
+                        <?php if(Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) { ?>
+                            a = document.createElement("a");
+                            a.innerText = "⇧";
+                            a.classList.add("support-level-upgrade");
+                            a.style.display = (ticket["status"] == 0 || ticket["status"] == 3) && ticket["level"] > 1 ? "" : "none";
+                            a.onclick = function () {
+                                upgradeTicket(ticket["id"], ticket["level"]-1);
+                            document.getElementById("board-0-" + (ticket["level"]-1)).appendChild(e);
+                            };
+                            info.appendChild(a);
+                        <?php } ?>
                         info.appendChild(document.createElement("br"));
                         a = document.createElement("a");
                         a.innerText = ticket["issue"];
                         a.href = "<?php echo(home_url()); ?>/ticket/" + ticket["id"];
-                        a.onclick = checkA;
+                        //a.onclick = checkA;
                         info.appendChild(a);
                         info.appendChild(document.createElement("br"));
                         a = document.createElement("a");
                         a.href = "<?php echo(home_url()); ?>/device/" + ticket["device"]["id"];
-                        a.onclick = checkA;
+                        //a.onclick = checkA;
                         a.classList.add("grey");
                         a.innerText = ticket["device"]["room"] + "/" + ticket["device"]["type"];
                         info.appendChild(a);
@@ -183,7 +216,7 @@
                             parent.appendChild(div);
                             //updateBox(parent);
                         }
-                        dragElement(div);
+                        //dragElement(div);
                     }
                 }
                 for (let ticket in data) {
