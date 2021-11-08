@@ -27,10 +27,16 @@ class API
         ]);
     }
 
+    public static function sort_devices($a, $b) {
+        return $a->getLocation()->getId() < $b->getLocation()->getId() ? -1 : 1;
+    }
+
     public static function create()
     {
         $data = ["data" => [], "issues" => []];
-        foreach (ITDesk::getInstance()->getInventory()->getDevices() as $device) {
+        $devices = ITDesk::getInstance()->getInventory()->getDevices();
+        $devices->sort(["API", "sort_devices"]);
+        foreach ($devices as $device) {
             $room = $device->getLocation();
             if (Wordpress::hasUserLevel($room->getVisibility())) {
                 if (!array_key_exists($room->getFloor(), $data["data"]))
