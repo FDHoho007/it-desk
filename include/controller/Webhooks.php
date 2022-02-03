@@ -32,7 +32,7 @@ class Webhooks {
 				],
 				"author" => [
 					"name" => $ticket->getAuthor() == - 1 ? "Anonym" : get_user_by("ID", $ticket->getAuthor())->display_name,
-					"icon_url" => $ticket->getAuthor() == - 1 ? "https://secure.gravatar.com/avatar/84013c34db30179ccfc3576255d2e89f?s=96&d=mm&r=g" : get_avatar_url($ticket->getAuthor())
+					"icon_url" => $ticket->getAuthor() == - 1 ? "https://secure.gravatar.com/avatar/84013c34db30179ccfc3576255d2e89f?s=96&d=mm&f=y&r=g" : get_avatar_url($ticket->getAuthor())
 				]
 			]]];
 			foreach ($this->webhooks as $webhook) {
