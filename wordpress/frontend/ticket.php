@@ -27,6 +27,9 @@ function custom_page()
                 $ticket->callEvent(StatusEvent::class);
                 $ticket->save();
             }
+        } else if ($_POST["action"] == "upgrade" && $ticket->getLevel() > 1 && (($ticket->getStatus() == 0 || $ticket->getStatus() == 3) && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) || ($ticket->getStatus() == 1 && ($ticket->getOperator() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP)))) {
+            $ticket->setLevel($ticket->getLevel()-1);
+            $ticket->save();
         } else if ($_POST["action"] == "message" && isset($_POST["message"]) && ($ticket->getAuthor() == get_current_user_id() || Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD))) {
             $ticket->callEvent(MessageEvent::class, htmlspecialchars($_POST["message"]));
             if ($ticket->getStatus() == 2 && !Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD)) {
@@ -37,6 +40,9 @@ function custom_page()
                 $ticket->setLevel(1);
                 $ticket->save();
             }
+        } else if ($_POST["action"] == "issue" && isset($_POST["issue"]) && ($issue = ITDesk::getInstance()->getIssue($_POST["issue"])) != null && ($icket->getStatus() != 2 && Wordpress::userHasUserLevel($user, Constants::USER_LEVEL_ITCROWD_HP))) {
+            $ticket->setIssue($issue);
+            $ticket->save();
         } else if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN))
             if ($_POST["action"] == "level" && isset($_POST["level"]) && ($_POST["level"] == 1 || $_POST["level"] == 2 || $_POST["level"] == 3) && $_POST["level"] != $ticket->getLevel()) {
                 $ticket->setLevel($_POST["level"]);
@@ -188,7 +194,7 @@ function custom_page()
                 $permissionBlockB = Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN);
                 if ($permissionBlockA || $permissionBlockB) { ?>
                     <div style="text-align: right; margin-bottom: 10px; user-select: none;">
-                        <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Bearbeiten</a>
+                        <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Administration</a>
                     </div>
                 <?php } ?>
                 <div id="edit" style="height: 0px;">
@@ -204,18 +210,45 @@ function custom_page()
                                                 echo("Schließen"); ?></button>
                                     </form>
                                 </td>
+                                <?php if($ticket->getLevel() > 1) { ?>
+                                    <td>
+                                        <form method="post">
+                                            <?php wp_nonce_field(); ?>
+                                            <input type="hidden" name="action" value="upgrade">
+                                            <button type="submit">Upgraden</button>
+                                        </form>
+                                    </td>
+                                <?php } ?>
                             <?php }
                             if ($permissionBlockB) { ?>
+                                    <td>
+                                        <form method="post">
+                                            <label>Levelauswahl</label><br>
+                                            <?php wp_nonce_field(); ?>
+                                            <input type="hidden" name="action" value="level">
+                                            <button type="submit" name="level" value="1">1</button>
+                                            <button type="submit" name="level" value="2">2</button>
+                                            <button type="submit" name="level" value="3">3</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                            <?php }
+                            if($permissionBlockB || ($icket->getStatus() != 2 && Wordpress::userHasUserLevel($user, Constants::USER_LEVEL_ITCROWD_HP))) { ?>
                                 <td>
                                     <form method="post">
-                                        <label>Levelauswahl</label><br>
                                         <?php wp_nonce_field(); ?>
-                                        <input type="hidden" name="action" value="level">
-                                        <button type="submit" name="level" value="1">1</button>
-                                        <button type="submit" name="level" value="2">2</button>
-                                        <button type="submit" name="level" value="3">3</button>
+                                        <label for="issue">Problem</label><br>
+                                        <input type="hidden" name="action" value="issue">
+                                        <select id="issue" name="issue">
+                                            <?php foreach (ITDesk::getInstance()->getTickets()->getIssues()->filter(function ($issue) { return in_array($ticket->getDevice()->getModel()->getType(), $issue->getAvailability()); }) as $issue)
+                                                echo("<option value=" . ($issue->getId() . $ticket->getIssue()->getId() == $issue->getId() ? " selected" : "") . ">" . $issue->getTitle() . "</option>"); ?>
+                                        </select><br>
+                                        <button type="submit">Speichern</button>
                                     </form>
                                 </td>
+                            <?php }
+                            if ($permissionBlockB) { ?>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>
@@ -231,7 +264,7 @@ function custom_page()
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>
-                                        <label for="operator">Bearbeiter setzen</label><br>
+                                        <label for="operator">Bearbeiter</label><br>
                                         <input type="hidden" name="action" value="operator">
                                         <select id="operator" name="operator">
                                             <?php foreach (get_users() as $user)

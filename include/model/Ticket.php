@@ -61,6 +61,11 @@ class Ticket extends Identifiable {
         return $this->issue;
     }
 
+    public function setIssue(Issue $issue): void
+    {
+        $this->issue = $issue;
+    }
+
     public function getAuthor(): ?int
     {
         return $this->author;
