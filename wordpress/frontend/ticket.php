@@ -194,7 +194,7 @@ function custom_page()
                 $permissionBlockB = Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN);
                 if ($permissionBlockA || $permissionBlockB) { ?>
                     <div style="text-align: right; margin-bottom: 10px; user-select: none;">
-                        <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '200px' : '0px';">Administration</a>
+                        <a onclick="let e = document.getElementById('edit'); e.style.height = e.style.height === '0px' ? '350px' : '0px';">Administration</a>
                     </div>
                 <?php } ?>
                 <div id="edit" style="height: 0px;">
@@ -242,7 +242,7 @@ function custom_page()
                                         <input type="hidden" name="action" value="issue">
                                         <select id="issue" name="issue">
                                             <?php foreach (ITDesk::getInstance()->getTickets()->getIssues()->filter(function ($issue) use ($ticket) { return in_array($ticket->getDevice()->getModel()->getType(), $issue->getAvailability()); }) as $issue)
-                                                echo("<option value=" . ($issue->getId() . $ticket->getIssue()->getId() == $issue->getId() ? " selected" : "") . ">" . $issue->getTitle() . "</option>"); ?>
+                                                echo("<option value=" . $issue->getId() . ($ticket->getIssue()->getId() == $issue->getId() ? " selected" : "") . ">" . $issue->getTitle() . "</option>"); ?>
                                         </select><br>
                                         <button type="submit">Speichern</button>
                                     </form>
