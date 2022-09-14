@@ -2,7 +2,8 @@
 function custom_page_title($title = "")
 {
     $ticket = ITDesk::getInstance()->getTicket(urldecode($_GET["ticket"]));
-    return $title != "" ? $title : ($ticket == null || !$ticket->canView() ? null : $ticket->getIssue()->getTitle() . " (#" . $ticket->getId() . ")");
+    $issue = isset($_POST["issue"]) ? ITDesk::getInstance()->getIssue($_POST["issue"]) : $ticket->getIssue();
+    return $title != "" ? $title : ($ticket == null || !$ticket->canView() ? null : $issue->getTitle() . " (#" . $ticket->getId() . ")");
 }
 
 function custom_page_subtitle()
