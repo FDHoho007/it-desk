@@ -118,7 +118,7 @@ class Ticket extends Identifiable {
 
     public function save()
     {
-        ITDesk::getInstance()->getDatabase()->exec("INSERT INTO " . Constants::DB_TABLE_TICKET . " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Status=?, Level=?, Operator=?;", $this->getId(), $this->getStatus(), $this->getLevel(), $this->getDevice()->getId(), $this->getIssue()->getId(), $this->getAuthor() == null ? null : $this->getAuthor(), $this->getShortName() == null ? null : htmlspecialchars($this->getShortName()), $this->getOperator() == null ? null : $this->getOperator(), $this->isAdminOnly() ? 1 : 0, $this->getStatus(), $this->getLevel(), $this->getOperator() == null ? null : $this->getOperator());
+        ITDesk::getInstance()->getDatabase()->exec("INSERT INTO " . Constants::DB_TABLE_TICKET . " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Issue=?, Status=?, Level=?, Operator=?;", $this->getId(), $this->getStatus(), $this->getLevel(), $this->getDevice()->getId(), $this->getIssue()->getId(), $this->getAuthor() == null ? null : $this->getAuthor(), $this->getShortName() == null ? null : htmlspecialchars($this->getShortName()), $this->getOperator() == null ? null : $this->getOperator(), $this->isAdminOnly() ? 1 : 0, $this->getIssue()->getId(), $this->getStatus(), $this->getLevel(), $this->getOperator() == null ? null : $this->getOperator());
         if ($this->getId() == null)
             $this->id = ITDesk::getInstance()->getDatabase()->getLastID();
     }
