@@ -241,7 +241,7 @@ function custom_page()
                                         <label for="issue">Problem</label><br>
                                         <input type="hidden" name="action" value="issue">
                                         <select id="issue" name="issue">
-                                            <?php foreach (ITDesk::getInstance()->getTickets()->getIssues()->filter(function ($issue) { return in_array($ticket->getDevice()->getModel()->getType(), $issue->getAvailability()); }) as $issue)
+                                            <?php foreach (ITDesk::getInstance()->getTickets()->getIssues()->filter(function ($issue) use ($ticket) { return in_array($ticket->getDevice()->getModel()->getType(), $issue->getAvailability()); }) as $issue)
                                                 echo("<option value=" . ($issue->getId() . $ticket->getIssue()->getId() == $issue->getId() ? " selected" : "") . ">" . $issue->getTitle() . "</option>"); ?>
                                         </select><br>
                                         <button type="submit">Speichern</button>
