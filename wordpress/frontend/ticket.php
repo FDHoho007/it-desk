@@ -40,7 +40,7 @@ function custom_page()
                 $ticket->setLevel(1);
                 $ticket->save();
             }
-        } else if ($_POST["action"] == "issue" && isset($_POST["issue"]) && ($issue = ITDesk::getInstance()->getIssue($_POST["issue"])) != null && ($ticket->getStatus() != 2 && Wordpress::userHasUserLevel($user, Constants::USER_LEVEL_ITCROWD_HP))) {
+        } else if ($_POST["action"] == "issue" && isset($_POST["issue"]) && ($issue = ITDesk::getInstance()->getIssue($_POST["issue"])) != null && ($ticket->getStatus() != 2 && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP))) {
             $ticket->setIssue($issue);
             $ticket->save();
         } else if (Wordpress::hasUserLevel(Constants::USER_LEVEL_ADMIN))
