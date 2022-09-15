@@ -269,7 +269,7 @@ function custom_page()
                     data = JSON.parse(this.responseText);
                     issues = data["issues"];
                     data = data["data"];
-                    updateView(null, set);
+                    updateView(null, Object.keys(set).length == 0 ? null : set);
                 }
             };
             xhttp.open("GET", "<?php echo(home_url() . "/wp-json/" . Constants::API_NAMESPACE . Constants::API_CREATE . (is_user_logged_in() ? "?_wpnonce=" . wp_create_nonce("wp_rest") : "")); ?>", true);
