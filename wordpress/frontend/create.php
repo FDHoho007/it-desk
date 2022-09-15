@@ -58,6 +58,12 @@ function custom_page()
             let data = [];
             let issues = [];
 
+            let floor = document.getElementById("floor");
+            let room = document.getElementById("room");
+            let type = document.getElementById("type");
+            let device = document.getElementById("device");
+            let issue = document.getElementById("issue");
+
             function clearSelect(e) {
                 let length = e.options.length;
                 for (let i = 1; i < length; i++)
@@ -65,11 +71,6 @@ function custom_page()
             }
 
             function updateView(e = null, set = null) {
-                let floor = document.getElementById("floor");
-                let room = document.getElementById("room");
-                let type = document.getElementById("type");
-                let device = document.getElementById("device");
-                let issue = document.getElementById("issue");
                 if (e == null || set != null) {
                     clearSelect(floor);
                     for (const f in data) {
@@ -156,7 +157,20 @@ function custom_page()
 				let message = document.getElementById("message").value;
 				location.href = url + "?redirect_to=" + encodeURIComponent("/create?" + (device === "null" ? "" : "device=" + device + "&") + (device === "null" || issue === "null" ? "" : "issue=" + issue + "&") + (shortname === "" ? "" : "shortname=" + shortname + "&") + (document.getElementById("adminOnly").checked ? "adminOnly&" : "") + (message === "" ? "" : "message=" + message));
 			}
-			
+
+            function gympIssue(issueId) {
+                floor.value = 5;
+                updateView(floor);
+                room.value = room.children[1].value;
+                updateView(room);
+                type.value = type.children[1].value;
+                updateView(type);
+                device.value = device.children[1].value;
+                updateView(device);
+                issue.value = issueId;
+                updateView(issue);
+            }
+
 			<?php
 			
 				$data = [];
@@ -180,6 +194,8 @@ function custom_page()
         <div class="main main-raised">
             <div class="container section section-text">
                 <form method="post">
+                    <b>Sie haben ein Problem hiermit? (anklicken)</b><br>
+                    <?php foreach (ITDesk::getInstance()->getTickets()->getIssues()->filter(fn($issue) => in_array(Server::ID, $issue->getAvailability())) as $issue) echo("<a href='#' onclick='gympIssue(" . $issue->getId() . ");'>" . $issue->getTitle() . "</a> "); ?><br><br>
                     <?php wp_nonce_field(); ?>
                     <label for="floor">Stockwerk:</label><br>
                     <select id="floor" onchange="updateView(this);">
