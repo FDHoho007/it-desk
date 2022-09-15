@@ -64,7 +64,7 @@ class Model extends Identifiable
 
     public function getClass(): ?string
     {
-        foreach ([DocumentCamera::class, Beamer::class, Screen::class, Printer::class, Laptop::class, Computer::class] as $c)
+        foreach (Device::getSubclasses() as $c)
             if ($c::ID == $this->getType())
                 return $c;
         return null;

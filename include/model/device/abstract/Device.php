@@ -85,4 +85,11 @@ abstract class Device extends Identifiable {
         return $this->getId();
     }
 
+    public static function getSubclasses(): array {
+        return array_values(array_filter(get_declared_classes(), function ($class) {
+        	$rc = new ReflectionClass($class);
+        	return $rc->isSubclassOf(self::class) && !$rc->isAbstract();
+        }));
+    }
+
 }

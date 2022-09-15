@@ -2,8 +2,8 @@
 
 class Constants {
 
-    const ARTIKEL = ["", "die", "der", "der", "der", "der", "der"];
-    const TYPES = ["", "Dokumentenkamera", "Beamer", "Bildschirm", "Drucker", "Laptop", "Computer"];
+    const ARTIKEL = ["", "die", "der", "der", "der", "der", "der", "der"];
+    const TYPES = ["", "Dokumentenkamera", "Beamer", "Bildschirm", "Drucker", "Laptop", "Computer", "Server"];
     const PATTERN_DATE = "/^([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})$/";
     const URL_SEPARATOR = ";";
     const STATUS = ["Offen", "In Bearbeitung", "Geschlossen", "Wiedereröffnet"];

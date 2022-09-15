@@ -27,26 +27,41 @@ class Inventory
             $room = $this->getRoom($device["Location"]);
             $purchaseDate = $device["PurchaseDate"] == null ? null : substr($device["PurchaseDate"], 0, -3);
             $notes = $device["Notes"];
-            switch ($model->getType()) {
+            if(($c = $model->getClass()) != null) {
+                $params = [$device["ID"], $model, $room, $purchaseDate, $notes];
+                $rc = new ReflectionClass($c);
+                if(sizeof($rcparams = $rc->getConstructor()->getParameters()) > 5)
+                    for($i = 5; $i < sizeof($rcparams); $i++) {
+                        $rcpname = $rcparams[$i]->getName();
+                        $params[] = $device[strtoupper(substr($rcpname, 0, 1)) . substr($rcpname, 1)];
+                    }
+                array_push($this->devices, new $c(...$params));
+            }
+            /*switch ($model->getType()) {
                 case DocumentCamera::ID:
-                    array_push($this->devices, new DocumentCamera($device["ID"], $model, $room, $purchaseDate, $notes, $device["RemoteControl"]));
+                    $do = new DocumentCamera($device["ID"], $model, $room, $purchaseDate, $notes, $device["RemoteControl"]);
                     break;
                 case Beamer::ID:
-                    array_push($this->devices, new Beamer($device["ID"], $model, $room, $purchaseDate, $notes, $device["RemoteControl"]));
+                    $do = new Beamer($device["ID"], $model, $room, $purchaseDate, $notes, $device["RemoteControl"]);
                     break;
                 case Screen::ID:
-                    array_push($this->devices, new Screen($device["ID"], $model, $room, $purchaseDate, $notes));
+                    $do = new Screen($device["ID"], $model, $room, $purchaseDate, $notes);
                     break;
                 case Printer::ID:
-                    array_push($this->devices, new Printer($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]));
+                    $do = new Printer($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]);
                     break;
                 case Laptop::ID:
-                    array_push($this->devices, new Laptop($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]));
+                    $do = new Laptop($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]);
                     break;
                 case Computer::ID:
-                    array_push($this->devices, new Computer($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]));
+                    $do = new Computer($device["ID"], $model, $room, $purchaseDate, $notes, $device["Name"], $device["LastHeartBeat"]);
+                    break;
+                case Server::ID:
+                    $do = new Server($device["ID"], $model, $room, $purchaseDate, $notes);
                     break;
             }
+            if(isset($do))
+                array_push($this->devices, $do);*/
         }
     }
 

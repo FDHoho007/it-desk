@@ -19,7 +19,7 @@ if (isset($_GET["model"])) {
                     array_push($pics, $_POST["Value"][$i]);
                 else if ($_POST["Variable"][$i] == "connection")
                     array_push($connections, $_POST["Value"][$i]);
-        if ($model == null && isset($_POST["Type"]) && $_POST["Type"] > 0 && $_POST["Type"] < 7 && isset($_POST["Company"]) && isset($_POST["ID"]))
+        if ($model == null && isset($_POST["Type"]) && $_POST["Type"] > 0 && $_POST["Type"] < sizeof(Constants::TYPES) && isset($_POST["Company"]) && isset($_POST["ID"]))
             if (ITDesk::getInstance()->getModel($_POST["ID"]) == null) {
                 (new Model($_POST["ID"], $_POST["Company"], $_POST["Type"], $links, $pics, $connections))->save();
                 $error = "success";
