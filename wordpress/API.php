@@ -134,7 +134,7 @@ class API
     }
 	
 	public static function heartbeat() {
-		if(isset(getallheaders()["Authorization"]) && getallheaders()["Authorization"] == "Bearer " . Constants::HEARTBEAT_SECRET && isset($_GET["id"])) {
+		if(isset(getallheaders()["Authorization"]) && getallheaders()["Authorization"] == "Bearer " . ITDesk::getInstance()->getConfig()->getContents()["heartbeat_secret"] && isset($_GET["id"])) {
 			$device = ITDesk::getInstance()->getDevice($_GET["id"]);
 			if($device != null && $device instanceof Nameable) {
 				$device->heartBeat();

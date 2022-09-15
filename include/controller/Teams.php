@@ -3,8 +3,7 @@
 class Teams
 {
 
-    const BOT_ID = "d8193f0a-7b87-4edf-8227-8bab58c79d70";
-    const BOT_PASSWORD = "n5~6I-K~GiAdb-F8.wlUB48H9h0d5yls5F";
+    // Update Bot Password here: https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Credentials/appId/d8193f0a-7b87-4edf-8227-8bab58c79d70/isMSAApp/
     private $users = [];
     private $token = null;
 
@@ -50,10 +49,11 @@ class Teams
     function getToken(): ?string
     {
         if ($this->token == null) {
+            $config = ITDesk::getInstance()->getConfig()->getContents()["teams"];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token");
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials&client_id=" . self::BOT_ID . "&client_secret=" . self::BOT_PASSWORD . "&scope=https%3A%2F%2Fapi.botframework.com%2F.default");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials&client_id=" . $config["bot_id"] . "&client_secret=" . $config["bot_password"] . "&scope=https%3A%2F%2Fapi.botframework.com%2F.default");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 "Content-Type: application/x-www-form-urlencoded",
             ]);

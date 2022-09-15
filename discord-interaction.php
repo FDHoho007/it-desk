@@ -48,7 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 					$params = [];
 					for($i = 0; $i<sizeof($options); $i++)
 						$params[$options[$i]["name"]] = $options[$i]["value"];
-					if($params["hash"] == hash_hmac("sha256", $params["user"], ITDesk::getInstance()->getConfig()->getContents()["hashSecret"])) {
+					if($params["hash"] == hash_hmac("sha256", $params["user"], $config["hashSecret"])) {
 						$discord->api("PUT", "guilds/$gid/members/$uid/roles/" . $config["verificationRole"]);
 						$discord->reply($body, "Du bist nun als IT Crowd Mitglied verifiziert.");
 					}

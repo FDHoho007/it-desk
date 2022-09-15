@@ -18,7 +18,6 @@ class Constants {
     const API_TICKETS = "/tickets";
     const API_TICKET = "/ticket";
 	const API_HEARTBEAT = "/heartbeat";
-	const HEARTBEAT_SECRET = "%g5f#&B\$pw*6M^#y46E66GNjwpcKJ^&$";
     const DB_TABLE_PREFIX = "it_";
     const DB_TABLE_TICKET = self::DB_TABLE_PREFIX . "ticket";
     const DB_TABLE_TICKET_EVENTS = self::DB_TABLE_PREFIX . "ticket_events";
