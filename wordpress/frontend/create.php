@@ -58,11 +58,7 @@ function custom_page()
             let data = [];
             let issues = [];
 
-            let floor = document.getElementById("floor");
-            let room = document.getElementById("room");
-            let type = document.getElementById("type");
-            let device = document.getElementById("device");
-            let issue = document.getElementById("issue");
+            // Select fields are defined below because yet not loaded into DOM
 
             function clearSelect(e) {
                 let length = e.options.length;
@@ -261,7 +257,13 @@ function custom_page()
 
         <script>
 
-            var xhttp = new XMLHttpRequest();
+            let floor = document.getElementById("floor");
+            let room = document.getElementById("room");
+            let type = document.getElementById("type");
+            let device = document.getElementById("device");
+            let issue = document.getElementById("issue");
+
+            let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     data = JSON.parse(this.responseText);
