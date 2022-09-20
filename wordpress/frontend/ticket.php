@@ -235,7 +235,7 @@ function custom_page()
                                 </tr>
                                 <tr>
                             <?php }
-                            if($permissionBlockB || ($ticket->getStatus() != 2 && Wordpress::userHasUserLevel($user, Constants::USER_LEVEL_ITCROWD_HP))) { ?>
+                            if($permissionBlockB || ($ticket->getStatus() != 2 && Wordpress::hasUserLevel(Constants::USER_LEVEL_ITCROWD_HP))) { ?>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field(); ?>
