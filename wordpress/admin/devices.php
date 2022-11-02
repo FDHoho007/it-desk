@@ -134,7 +134,14 @@ if (isset($_GET["device"])) {
 
 <?php } else { ?>
 
-	<link rel="stylesheet" href="/wp-content/plugins/font-awesome/animation.min.css">
+    <style>
+        .heart-green:before {
+            color: rgb(80, 175, 81);
+        }
+        .heart-red:before {
+            color: rgb(217, 83, 79);
+        }
+    </style>
 
     <div class="wrap">
 
@@ -159,10 +166,10 @@ if (isset($_GET["device"])) {
                 ?>
                 <tr>
 					<td>
-					<?php if($device instanceof Nameable) if($device->getLastHeartBeat() != 0 && $device->getLastHeartBeat() > time()-900) { ?>
-							<i class="fa fa-fw fa-heartbeat faa-pulse animated" title="" style="color: rgb(80, 175, 81);"></i>
+					    <?php if($device instanceof Nameable) if($device->getLastHeartBeat() != 0 && $device->getLastHeartBeat() > time()-900) { ?>
+                            <div class="dashicons-before dashicons-heart heart-green" aria-hidden="true"><br></div>
 						<?php } else { ?>
-							<i class="fa fa-fw fa-heart-o"  title="" style="color: rgb(217, 83, 79);"></i>
+                            <div class="dashicons-before dashicons-heart heart-red" aria-hidden="true"><br></div>
 						<?php } ?>
 					</td>
                     <td>
