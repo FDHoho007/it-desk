@@ -94,7 +94,7 @@ class Ticket extends Identifiable {
     public function getEvents(): DataSet
     {
         return (new DataSet($this->events))->sort(function ($e1, $e2) {
-            return $e1->getId() < $e2->getId();
+            return $e1->getId() <=> $e2->getId();
         });
     }
 
