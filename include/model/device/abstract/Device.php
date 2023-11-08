@@ -13,7 +13,7 @@ abstract class Device extends Identifiable {
         $this->id           = htmlspecialchars($id);
         $this->model        = $model;
         $this->location     = $location;
-        $this->purchaseDate = preg_match(Constants::PATTERN_DATE, $purchaseDate) ? $purchaseDate : null;
+        $this->purchaseDate = $purchaseDate != null && preg_match(Constants::PATTERN_DATE, $purchaseDate) ? $purchaseDate : null;
         $this->notes        = $notes;
     }
 
