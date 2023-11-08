@@ -2,8 +2,7 @@
 
 class Discord {
 
-    public function __construct(string $botToken) {
-        $this->botToken = $botToken;
+    public function __construct(private string $botToken) {
     }
 
     public function api(string $method, string $url, string $body = "", array $header = ["Authorization: Bot ", "Content-Type: application/json"]) {
