@@ -7,8 +7,9 @@
  * Version: 2.0.0
  */
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Use during debugging only
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require "include/it.php";
 $wp_dir = dirname(__FILE__) . "/wordpress/";
 foreach (scandir($wp_dir) as $file)
